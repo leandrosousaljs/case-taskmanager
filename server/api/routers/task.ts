@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { TRPCError } from '@trpc/server';
 
-import { tasks } from '@/server/data/task-store';
+import { tasks } from '@/server/data/taskStore';
 import { publicProcedure, router } from '../trpc';
 
 export const taskRouter = router({
