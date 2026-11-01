@@ -1,6 +1,8 @@
+import { z } from 'zod';
+import { TRPCError } from '@trpc/server';
+
 import { tasks } from '@/server/data/task-store';
 import { publicProcedure, router } from '../trpc';
-import { z } from 'zod';
 
 export const taskRouter = router({
   list: publicProcedure.query(() => {
@@ -18,12 +20,36 @@ export const taskRouter = router({
       const newTask = {
         id: crypto.randomUUID(),
         titulo: input.titulo,
-        descricao: input.descricao || '',
+        descricao: input.descricao,
         dataCriacao: new Date(),
       };
 
       tasks.push(newTask);
 
       return newTask;
+    }),
+
+  update: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        titulo: z.string().trim().min(1, 'O título é obrigatório'),
+        descricao: z.string().trim().optional(),
+      }),
+    )
+    .mutation(({ input }) => {
+      const task = tasks.find((t) => t.id === input.id);
+
+      if (!task) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'Tarefa não encontrada',
+        });
+      }
+
+      task.titulo = input.titulo;
+      task.descricao = input.descricao;
+
+      return task;
     }),
 });
