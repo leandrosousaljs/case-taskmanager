@@ -1,3 +1,15 @@
-export default function Home() {
-  return <h1 className="text-indigo-500 text-3xl">Hello, World!</h1>;
+import { createCallerInstance } from '@/server/api/root';
+
+export default async function Home() {
+  const tasks = await createCallerInstance.task.list();
+
+  return (
+    <main>
+      <div>
+        {tasks.map((task) => (
+          <div key={task.id}>{task.titulo}</div>
+        ))}
+      </div>
+    </main>
+  );
 }
