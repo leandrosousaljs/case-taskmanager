@@ -52,4 +52,25 @@ export const taskRouter = router({
 
       return task;
     }),
+
+  delete: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      }),
+    )
+    .mutation(({ input }) => {
+      const taskIndex = tasks.findIndex((t) => t.id === input.id);
+
+      if (taskIndex === -1) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'Tarefa não encontrada',
+        });
+      }
+
+      const deletedTask = tasks.splice(taskIndex, 1)[0];
+
+      return deletedTask;
+    }),
 });
