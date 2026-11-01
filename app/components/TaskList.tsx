@@ -1,4 +1,5 @@
 import { Task } from '@/server/data/taskStore';
+import TaskItem from './TaskItem';
 
 const TaskList = ({ tasks }: { tasks: Task[] }) => {
   return (
@@ -8,7 +9,7 @@ const TaskList = ({ tasks }: { tasks: Task[] }) => {
       ) : (
         <div>
           {tasks.map((task) => (
-            <div key={task.id}>{task.titulo}</div>
+            <TaskItem key={task.id} task={task} />
           ))}
         </div>
       )}
