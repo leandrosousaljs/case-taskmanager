@@ -10,6 +10,8 @@ type EditPageProps = {
   params: Promise<{ id: string }>;
 };
 
+export const instant = false;
+
 const EditPage = async ({ params }: EditPageProps) => {
   const { id } = await params;
 

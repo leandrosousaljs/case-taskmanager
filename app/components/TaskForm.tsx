@@ -23,7 +23,10 @@ const TaskForm = ({ task }: TaskFormProps) => {
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!titulo.trim()) return;
+    if (!titulo.trim()) {
+      setErrorMessage('O título é obrigatório.');
+      return;
+    }
 
     setSuccessMessage('');
     setErrorMessage('');
