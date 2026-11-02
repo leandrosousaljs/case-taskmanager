@@ -9,6 +9,25 @@ export const taskRouter = router({
     return tasks;
   }),
 
+  getById: publicProcedure
+    .input(
+      z.object({
+        id: z.string().trim().min(1, 'O ID é obrigatório'),
+      }),
+    )
+    .query(({ input }) => {
+      const task = tasks.find((t) => t.id === input.id);
+
+      if (!task) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'Tarefa não encontrada',
+        });
+      }
+
+      return task;
+    }),
+
   create: publicProcedure
     .input(
       z.object({
