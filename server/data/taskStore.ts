@@ -5,7 +5,13 @@ export type Task = {
   dataCriacao: Date;
 };
 
-export const tasks: Task[] = [
+type TaskStoreGlobal = typeof globalThis & {
+  taskStore?: Task[];
+};
+
+const globalForTaskStore = globalThis as TaskStoreGlobal;
+
+export const tasks: Task[] = (globalForTaskStore.taskStore ??= [
   {
     id: '1',
     titulo: 'Estudar Next.js',
@@ -18,4 +24,4 @@ export const tasks: Task[] = [
     descricao: 'Configurar o backend',
     dataCriacao: new Date(),
   },
-];
+]);
