@@ -30,7 +30,7 @@ const EditPage = async ({ params }: EditPageProps) => {
   return (
     <div>
       <h2>Editar Tarefa</h2>
-      <TaskForm task={task} />
+      <TaskForm key={task.id} task={task} />
       <Link href={'/'}>Voltar</Link>
     </div>
   );

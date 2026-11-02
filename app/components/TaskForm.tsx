@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { trpcClient } from '@/trpc/client';
@@ -17,6 +17,11 @@ const TaskForm = ({ task }: TaskFormProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+
+  useEffect(() => {
+    setTitulo(task?.titulo ?? '');
+    setDescricao(task?.descricao ?? '');
+  }, [task?.titulo, task?.descricao]);
 
   const router = useRouter();
 
