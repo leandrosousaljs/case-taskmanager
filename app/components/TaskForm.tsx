@@ -2,6 +2,8 @@
 
 import { trpcClient } from '@/trpc/client';
 import { TRPCClientError } from '@trpc/client';
+import { useRouter } from 'next/navigation';
+
 import React, { useState } from 'react';
 
 const TaskForm = () => {
@@ -10,6 +12,8 @@ const TaskForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+
+  const router = useRouter();
 
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -29,6 +33,8 @@ const TaskForm = () => {
       setTitulo('');
       setDescricao('');
       setSuccessMessage('Tarefa criada com sucesso!');
+      router.push('/');
+      router.refresh();
     } catch (error) {
       if (error instanceof TRPCClientError) {
         setErrorMessage(error.message);

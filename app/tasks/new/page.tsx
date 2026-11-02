@@ -1,5 +1,15 @@
+import Link from 'next/link';
+
+import TaskForm from '@/app/components/TaskForm';
+
 const NewTask = () => {
-  return <div>NewTask</div>;
+  return (
+    <>
+      <h1>Nova Tarefa</h1>
+      <TaskForm />
+      <Link href="/">Voltar para a lista de tarefas</Link>
+    </>
+  );
 };
 
 export default NewTask;
