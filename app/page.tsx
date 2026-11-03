@@ -10,7 +10,7 @@ export const instant = false;
 export default async function Home() {
   await connection();
 
-  const tasks = await createCallerInstance.task.list();
+  const result = await createCallerInstance.task.listPaginated({ offset: 0, limit: 10 });
 
   return (
     <main className="container mx-auto px-4 py-8 max-w-5xl">
@@ -23,7 +23,7 @@ export default async function Home() {
         </Button>
       </div>
 
-      <TaskList tasks={tasks} />
+      <TaskList initialTasks={result.items} initialOffset={result.nextOffset} initialHasMore={result.hasMore} />
     </main>
   );
 }
