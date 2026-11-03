@@ -3,28 +3,27 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { trpcClient } from '@/trpc/client';
-import { TRPCClientError } from '@trpc/client';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/components/ui/toast';
+import { Trash2 } from 'lucide-react';
 
 const DeleteTaskButton = ({ id }: { id: string }) => {
-  const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-
   const router = useRouter();
+  const { showToast } = useToast();
 
   const handleClick = async () => {
+    const confirmDelete = window.confirm('Deseja realmente excluir esta tarefa?');
+    if (!confirmDelete) return;
+
     setIsLoading(true);
-    setErrorMessage('');
 
     try {
       await trpcClient.task.delete.mutate({ id });
-
+      showToast('Tarefa excluída com sucesso!', 'success');
       router.refresh();
     } catch (error) {
-      if (error instanceof TRPCClientError) {
-        setErrorMessage(error.message);
-      } else {
-        setErrorMessage('Ocorreu um erro ao excluir a tarefa.');
-      }
+      showToast('Ocorreu um erro ao excluir a tarefa.', 'error');
       console.error('Erro ao excluir a tarefa:', error);
     } finally {
       setIsLoading(false);
@@ -32,12 +31,10 @@ const DeleteTaskButton = ({ id }: { id: string }) => {
   };
 
   return (
-    <div>
-      <button onClick={handleClick} disabled={isLoading}>
-        {isLoading ? 'Excluindo...' : 'Excluir'}
-      </button>
-      {errorMessage && <p role="alert">{errorMessage}</p>}
-    </div>
+    <Button onClick={handleClick} disabled={isLoading} variant="destructive" size="sm" className="gap-2">
+      <Trash2 className="w-4 h-4" />
+      {isLoading ? 'Excluindo...' : 'Excluir'}
+    </Button>
   );
 };
 
