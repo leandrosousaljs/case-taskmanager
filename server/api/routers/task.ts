@@ -9,6 +9,26 @@ export const taskRouter = router({
     return tasks;
   }),
 
+  listPaginated: publicProcedure
+    .input(
+      z.object({
+        offset: z.number().int().min(0).default(0),
+        limit: z.number().int().min(1).max(50).default(10),
+      }),
+    )
+    .query(({ input }) => {
+      const items = tasks.slice(input.offset, input.offset + input.limit);
+
+      const nextOffset = input.offset + items.length;
+      const hasMore = nextOffset < tasks.length;
+
+      return {
+        items,
+        nextOffset: hasMore ? nextOffset : null,
+        hasMore,
+      };
+    }),
+
   getById: publicProcedure
     .input(
       z.object({
@@ -43,7 +63,7 @@ export const taskRouter = router({
         dataCriacao: new Date(),
       };
 
-      tasks.push(newTask);
+      tasks.unshift(newTask);
 
       return newTask;
     }),
