@@ -5,10 +5,6 @@ import { tasks } from '@/server/data/taskStore';
 import { publicProcedure, router } from '../trpc';
 
 export const taskRouter = router({
-  list: publicProcedure.query(() => {
-    return tasks;
-  }),
-
   listPaginated: publicProcedure
     .input(
       z.object({
